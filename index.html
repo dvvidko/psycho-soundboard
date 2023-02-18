@@ -178,35 +178,6 @@
 			  </style>
 			  
 			 <script>
-			 window.addEventListener('load', function() {
-			   let deferredPrompt;
-			 
-			   window.addEventListener('beforeinstallprompt', function(event) {
-				 event.preventDefault();
-				 deferredPrompt = event;
-				 // Update UI notify the user they can add to home screen
-				 const btnAdd = document.createElement('button');
-				 btnAdd.style.display = 'block';
-				 btnAdd.style.position = 'fixed';
-				 btnAdd.style.bottom = '10px';
-				 btnAdd.style.left = '50%';
-				 btnAdd.style.transform = 'translateX(-50%)';
-				 btnAdd.innerText = 'Add to home screen';
-				 btnAdd.addEventListener('click', (event) => {
-				   deferredPrompt.prompt();
-				   deferredPrompt.userChoice.then((choiceResult) => {
-					 if (choiceResult.outcome === 'accepted') {
-					   console.log('User accepted the A2HS prompt');
-					 } else {
-					   console.log('User dismissed the A2HS prompt');
-					 }
-					 deferredPrompt = null;
-				   });
-				 });
-				 document.body.appendChild(btnAdd);
-			   });
-			 });
-			
 				 function playSound(soundId) {
 					 var sound = document.getElementById(soundId);
 					 sound.play();
