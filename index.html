@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Psycho Soundboard</title>
+	<meta charset="UTF-8">
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com"> 
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+	<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #111;
+			color:#fff;
+			font-family: sans-serif;
+		}
+		
+		header {
+			display:block;
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+			justify-content: center;
+			padding: 6px 16px;
+	
+		}
+		
+		.container {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+			justify-content: center;
+		}
+		
+		.tile {
+			background-color: #1f1f1f;
+			font-family: 'Amatic SC', cursive;
+			width: 23%;
+			height: 200px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.8rem;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2);
+			position: relative;
+			overflow: hidden;
+			margin: 10px;
+			box-sizing: border-box;
+		}
+		
+		.tile:hover {
+			background-color: #2f2f2f;
+		}
+		
+		.tile.playing {
+			background-color: #BC2127;
+			-webkit-box-shadow: 0px 0px 10px 0px rgba(255,0,10,0.5);
+			-moz-box-shadow: 0px 0px 10px 0px rgba(255,0,10,0.5);
+			box-shadow: 0px 0px 10px 0px rgba(255,0,10,0.5);
+			animation: shake 0.2s ease-in-out infinite;
+			animation-fill-mode: forwards
+		}
+		
+		.tile:active:after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 100%;
+			height: 100%;
+			background-color: rgba(255, 255, 255, 0.4);
+			border-radius: 50%;
+			z-index: 1;
+			opacity: 0;
+			animation: lightEffect 0.2s ease-out;
+		}
+		
+		.image {
+		  width:100%;
+		  max-width: 64px;
+		}
+		
+		@keyframes shake {
+		  0% { transform: translateX(0); }
+		  25% { transform: translateX(-2px); }
+		  50% { transform: translateX(2px); }
+					75% { transform: translateX(-2px); }
+					100% { transform: translateX(0); }
+				  }
+			  
+				  
+				  @keyframes lightEffect {
+					  from { opacity: 1; transform: scale(0); }
+					  to { opacity: 0; transform: scale(2); }
+				  }
+				  
+				  @keyframes spin {
+					  from { transform: rotate(0deg); }
+					  to { transform: rotate(360deg); }
+				  }
+				  
+				  #loader {
+					  display: flex;
+					  align-items: center;
+					  justify-content: center;
+					  position: fixed;
+					  top: 0;
+					  left: 0;
+					  width: 100%;
+					  height: 100%;
+					  background-color: #111;
+					  z-index: 9999;
+				  }
+				  
+				  #loader svg {
+					  animation: spin 1s linear infinite;
+					  width: 80px;
+					  height: 80px;
+					  fill: none;
+					  stroke: #fff;
+					  stroke-width: 8;
+					  stroke-linecap: round;
+					  stroke-dasharray: 1, 200;
+					  stroke-dashoffset: 0;
+				  }
+				  
+				  #loader.hide {
+					  display: none;
+				  }
+				  
+				  @media (max-width: 479px) {
+					.tile {
+					  width: 100%;
+					  margin: 5px 0;
+					}
+				  }
+				  
+				  @media (max-width: 767px) {
+					  .tile {
+						  width: 45%;
+						  height: 100px;
+						  margin: 5px;
+					  }
+					  body {
+						  padding: 0;
+					  }
+				  }
+			  
+				  @media (min-width: 768px) {
+					  .tile {
+						  width: 23%;
+						  height: 200px;
+					  }
+					  body {
+						  padding: 0;
+					  }
+				  }
+			  </style>
+			  
+			 <script>
+				 function playSound(soundId) {
+					 var sound = document.getElementById(soundId);
+					 sound.play();
+					 var tile = document.querySelector('[onclick="playSound(\'' + soundId + '\')"]');
+					 tile.classList.add('playing');
+					 sound.addEventListener('ended', function() {
+						 tile.classList.remove('playing');
+					 });
+				 }
+				 
+				window.addEventListener('load', function() {
+					var audioFiles = document.querySelectorAll('audio');
+					var numLoaded = 0;
+					var loader = document.getElementById('loader');
+					var container = document.querySelector('.container');
+					
+					for (var i = 0; i < audioFiles.length; i++) {
+						audioFiles[i].addEventListener('canplaythrough', function() {
+							numLoaded++;
+							if (numLoaded === audioFiles.length) {
+								loader.classList.add('hide');
+								container.style.display = 'flex'; // Show the container
+							}
+						});
+						audioFiles[i].load();
+					}
+				});
+			 </script>
+</head>
+<body>
+	<div id="loader">
+		<svg>
+			<circle cx="40" cy="40" r="30"></circle>
+		</svg>
+	</div>
+	<header>
+		<img class="image" src="logo.png">	
+	</header>
+	<div class="container" style="display:none">
+	<div class="tile" onclick="playSound('sound1')">Dobrý den!</div>
+	<audio id="sound1" src="mp3/dobryden.mp3"></audio>
+	<div class="tile" onclick="playSound('sound7')">A pujdeme na to</div>
+	<audio id="sound2" src="mp3/pujdeme_na_to.mp3"></audio>
+	<div class="tile" onclick="playSound('sound3')">Můj protein!!!</div>
+	<audio id="sound3" src="mp3/protein.mp3"></audio>
+	<div class="tile" onclick="playSound('sound4')">Já tě miluju</div>
+	<audio id="sound4" src="mp3/miluju.mp3"></audio>
+	<div class="tile" onclick="playSound('sound5')">Ťuky ťuk</div>
+	<audio id="sound5" src="mp3/tuky_tuk.mp3"></audio>
+	<div class="tile" onclick="playSound('sound6')">Ty sračko</div>
+	<audio id="sound6" src="mp3/ty_sracko.mp3"></audio>
+	<div class="tile" onclick="playSound('sound7')">Tady máš káves</div>
+	<audio id="sound7" src="mp3/tady_mas_kaves.mp3"></audio>
+	<div class="tile" onclick="playSound('sound8')">Kurvaaa!!!</div>
+	<audio id="sound8" src="mp3/tady_mas_kaves.mp3"></audio>
+	</div>
+</body></html>
